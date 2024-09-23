@@ -130,19 +130,19 @@ public class BreathingGameController : MonoBehaviour
 
     void CreateWaterDrop()
     {
-        Instantiate(waterDropPrefab, new Vector3(0, 5, 0), Quaternion.identity);
-        waterDropSound.Play();
+        //Instantiate(waterDropPrefab, new Vector3(0, 5, 0), Quaternion.identity);
+        //waterDropSound.Play();
     }
 
     void GrowMushroom()
     {
-        mushroom.GetComponent<Animator>().SetTrigger("Grow");
-        mushroomGrowSound.Play();
+        // mushroom.GetComponent<Animator>().SetTrigger("Grow");
+        // mushroomGrowSound.Play();
     }
 
     void ShakeMushroom()
     {
-        mushroom.GetComponent<Animator>().SetTrigger("Shake");
-        mushroomShakeSound.Play();
+        // mushroom.GetComponent<Animator>().SetTrigger("Shake");
+        // mushroomShakeSound.Play();
     }
 }
