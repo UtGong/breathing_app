@@ -10,14 +10,15 @@ public class BreathingGameController : MonoBehaviour
     public int state2Count = 15;
     public int state3Count = 4;
 
-    public GameObject waterDropPrefab;
-    public GameObject mushroom;
-    public AudioSource waterDropSound;
-    public AudioSource mushroomGrowSound;
-    public AudioSource mushroomShakeSound;
+
+    public AudioClip waterDropSound;
+    public AudioClip mushroomGrowSound;
+    public AudioSource mushroomAS;
 
     private float breathTimer = 0f;
     private float breathDuration = 8f; // 吸气4秒+保持4秒+呼气4秒+保持4秒
+
+    public  Animator MushroomAnimator;
     
     public UDPReceiver udpReceiver;
     private float previousIntensity = 0f;
@@ -130,14 +131,16 @@ public class BreathingGameController : MonoBehaviour
 
     void CreateWaterDrop()
     {
-        //Instantiate(waterDropPrefab, new Vector3(0, 5, 0), Quaternion.identity);
-        //waterDropSound.Play();
+        MushroomAnimator.SetTrigger("Drop");
+        mushroomAS.clip = waterDropSound;
+        mushroomAS.Play();
     }
 
     void GrowMushroom()
     {
-        // mushroom.GetComponent<Animator>().SetTrigger("Grow");
-        // mushroomGrowSound.Play();
+        MushroomAnimator.SetTrigger("Grow");
+        mushroomAS.clip = mushroomGrowSound;
+        mushroomAS.Play();
     }
 
     void ShakeMushroom()
