@@ -1630,7 +1630,7 @@ MonoBehaviour:
   mushroomAS: {fileID: 1096533421}
   MushroomAnimator: {fileID: 214609726}
   breathTxt: {fileID: 1277038023}
-  curStateTxt: {fileID: 808435879}
+  curStateTxt: {fileID: 1254263787}
   breathCountTxt: {fileID: 808435879}
 --- !u!4 &1096533420
 Transform:
