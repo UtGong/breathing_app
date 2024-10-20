@@ -20,7 +20,7 @@ public class BreathingGameController : MonoBehaviour
 
     public  Animator MushroomAnimator;
     
-    public UDPReceiver udpReceiver;
+    //public UDPReceiver udpReceiver;
     private float previousIntensity = 0f;
 
     private bool isStart = false;
