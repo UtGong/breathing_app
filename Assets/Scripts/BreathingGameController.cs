@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class BreathingGameController : MonoBehaviour
 {
@@ -16,9 +17,9 @@ public class BreathingGameController : MonoBehaviour
     public AudioSource mushroomAS;
 
     private float breathTimer = 0f;
-    private float breathDuration = 8f; // 吸气4秒+保持4秒+呼气4秒+保持4秒
+    public float breathDuration = 8f; // 吸气4秒+保持4秒+呼气4秒+保持4秒
 
-    public  Animator MushroomAnimator;
+    public Animator MushroomAnimator;
 
     public Animator DropAnimator;
     
@@ -30,6 +31,8 @@ public class BreathingGameController : MonoBehaviour
     public TextMeshProUGUI breathTxt;
     public TextMeshProUGUI curStateTxt;
     public TextMeshProUGUI breathCountTxt;
+
+    public Slider ProgressSlider;
 
     void Update()
     {
@@ -53,7 +56,9 @@ public class BreathingGameController : MonoBehaviour
         curStateTxt.text ="stage:" + currentStage ;
         breathCountTxt.text = "breath count:"+breathCount;
         breathTxt.text = "breath timer:"+breathTimer;
-
+        
+        ProgressSlider.maxValue = breathDuration;
+        ProgressSlider.value = breathTimer;
     }
 
     public void StartGame()
@@ -106,7 +111,7 @@ public class BreathingGameController : MonoBehaviour
         {
             breathTimer = 0f;
             breathCount++;
-            GrowMushroom();
+            CreateWaterDrop();
             if (breathCount >= state2Count)
             {
                 currentStage = 4;
@@ -114,6 +119,7 @@ public class BreathingGameController : MonoBehaviour
                 breathTimer = 0;
             }
         }
+        GrowMushroom(breathCount/ state2Count);
     }
 
     void HandleMushroomShake()
@@ -124,6 +130,7 @@ public class BreathingGameController : MonoBehaviour
             breathTimer = 0f;
             breathCount++;
             ShakeMushroom();
+            CreateWaterDrop();
             if (breathCount >= state3Count)
             {
                 Debug.Log("Game Finished!");
@@ -138,11 +145,11 @@ public class BreathingGameController : MonoBehaviour
         mushroomAS.Play();
     }
 
-    void GrowMushroom()
+    void GrowMushroom(float progress)
     {
-        MushroomAnimator.SetTrigger("Grow");
-        mushroomAS.clip = mushroomGrowSound;
-        mushroomAS.Play();
+        MushroomAnimator.Play("Base Layer.Grow", 0, progress); // 归一化时间
+        // mushroomAS.clip = mushroomGrowSound;
+        // mushroomAS.Play();
     }
 
     void ShakeMushroom()

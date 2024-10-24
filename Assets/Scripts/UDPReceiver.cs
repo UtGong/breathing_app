@@ -10,6 +10,8 @@ public class UDPReceiver : MonoBehaviour
     private Thread receiveThread;
     public int port = 12345; // 设置UDP接收的端口号
     public float breathingIntensity = 0f; // 接收的呼吸强度
+    private bool isStartGame = false;
+    public BreathingGameController BreathController;
 
     void Start()
     {
@@ -29,6 +31,11 @@ public class UDPReceiver : MonoBehaviour
                 byte[] data = udpClient.Receive(ref remoteEndPoint);
                 string message = Encoding.ASCII.GetString(data);
                 breathingIntensity = float.Parse(message);
+                if (breathingIntensity > 0 && !isStartGame)
+                {
+                    BreathController.StartGame();
+                    isStartGame = true;
+                }
                 Debug.Log("Received breath intensity: " + breathingIntensity);
             }
             catch (System.Exception e)
