@@ -19,6 +19,8 @@ public class BreathingGameController : MonoBehaviour
     private float breathDuration = 8f; // 吸气4秒+保持4秒+呼气4秒+保持4秒
 
     public  Animator MushroomAnimator;
+
+    public Animator DropAnimator;
     
     //public UDPReceiver udpReceiver;
     private float previousIntensity = 0f;
@@ -131,7 +133,7 @@ public class BreathingGameController : MonoBehaviour
 
     void CreateWaterDrop()
     {
-        MushroomAnimator.SetTrigger("Drop");
+        DropAnimator.SetTrigger("Drop");
         mushroomAS.clip = waterDropSound;
         mushroomAS.Play();
     }
