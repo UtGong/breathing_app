@@ -11,6 +11,9 @@ public class BreathingGameController : MonoBehaviour
     public int state2Count = 15;
     public int state3Count = 4;
 
+    public GameObject[] state2List;
+    public GameObject[] state3List;
+
 
     public AudioClip waterDropSound;
     public AudioClip mushroomGrowSound;
@@ -22,6 +25,8 @@ public class BreathingGameController : MonoBehaviour
     public Animator MushroomAnimator;
 
     public Animator DropAnimator;
+
+    public Animator State4DropAnimator;
     
     //public UDPReceiver udpReceiver;
     private float previousIntensity = 0f;
@@ -111,16 +116,22 @@ public class BreathingGameController : MonoBehaviour
         {
             breathTimer = 0f;
             breathCount++;
-            CreateWaterDrop();
             if (breathCount >= state2Count)
             {
+                ActiveGameObjectList(state2List, false);
+                ActiveGameObjectList(state3List, true);
+                MushroomAnimator.Play("Grow");
                 currentStage = 4;
                 breathCount = 0;
                 breathTimer = 0;
             }
+            else
+            {
+                CreateWaterDrop();
+            }
         }
-        GrowMushroom(breathCount/ state2Count);
     }
+
 
     void HandleMushroomShake()
     {
@@ -129,13 +140,21 @@ public class BreathingGameController : MonoBehaviour
         {
             breathTimer = 0f;
             breathCount++;
-            ShakeMushroom();
-            CreateWaterDrop();
+            // ShakeMushroom();
+            State4WaterDrop();
             if (breathCount >= state3Count)
             {
                 Debug.Log("Game Finished!");
             }
         }
+    }
+
+    void State4WaterDrop()
+    {
+        State4DropAnimator.SetTrigger("DropState4");
+        MushroomAnimator.Play("DropNew");
+        mushroomAS.clip = waterDropSound;
+        mushroomAS.Play();
     }
 
     void CreateWaterDrop()
@@ -147,14 +166,26 @@ public class BreathingGameController : MonoBehaviour
 
     void GrowMushroom(float progress)
     {
+        Debug.Log("progress:" + progress);
         MushroomAnimator.Play("Base Layer.Grow", 0, progress); // 归一化时间
         // mushroomAS.clip = mushroomGrowSound;
         // mushroomAS.Play();
     }
+    
+    
+    void ActiveGameObjectList(GameObject[] list, bool active)
+    {
+        for (int i = 0; i < list.Length; i++)
+        {
+            list[i].SetActive(active);
+        }
+    }
 
     void ShakeMushroom()
     {
+        MushroomAnimator.Play("DropNew");
         // mushroom.GetComponent<Animator>().SetTrigger("Shake");
         // mushroomShakeSound.Play();
     }
+    
 }
