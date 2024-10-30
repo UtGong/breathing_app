@@ -325,7 +325,8 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
@@ -694,7 +695,8 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
@@ -7680,7 +7682,8 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
@@ -8123,6 +8126,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   port: 12345
   breathingIntensity: 0
+  BreathController: {fileID: 0}
 --- !u!4 &1921135644
 Transform:
   m_ObjectHideFlags: 0
@@ -8156,16 +8160,16 @@ MonoBehaviour:
   state1Count: 10
   state2Count: 15
   state3Count: 4
-  waterDropPrefab: {fileID: 6829852895826178814, guid: b913d63007b81f54d9b5057d85da13a4,
-    type: 3}
-  mushroom: {fileID: 0}
   waterDropSound: {fileID: 0}
   mushroomGrowSound: {fileID: 0}
-  mushroomShakeSound: {fileID: 0}
-  udpReceiver: {fileID: 1921135643}
+  mushroomAS: {fileID: 0}
+  breathDuration: 8
+  MushroomAnimator: {fileID: 0}
+  DropAnimator: {fileID: 0}
   breathTxt: {fileID: 500749004}
   curStateTxt: {fileID: 2139392188}
   breathCountTxt: {fileID: 169747159}
+  ProgressSlider: {fileID: 0}
 --- !u!1 &2055164921
 GameObject:
   m_ObjectHideFlags: 0
@@ -8450,7 +8454,8 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
