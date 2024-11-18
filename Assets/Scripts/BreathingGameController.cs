@@ -1,10 +1,13 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 public class BreathingGameController : MonoBehaviour
 {
-    public int currentStage = 1;
+    public int currentStage = 0;
     public int breathCount = 0;
     public int preStateCount = 10;
     public int state1Count = 10;
@@ -19,8 +22,17 @@ public class BreathingGameController : MonoBehaviour
     public AudioClip mushroomGrowSound;
     public AudioSource mushroomAS;
 
+    public GameObject guideVideoS1;
+    public VideoPlayer guideVideoPlayer1;
+
+    public AudioClip guideAudioS2;
+    public AudioClip guideAudioS3;
+    public AudioClip guideAudioS4;
+    private bool isWatchingVideo;
+    public GameObject GuideAudioController;
+
     private float breathTimer = 0f;
-    public float breathDuration = 8f; // 吸气4秒+保持4秒+呼气4秒+保持4秒
+    public float breathDuration = 5f; // 吸气4秒+保持4秒+呼气4秒+保持4秒
 
     public Animator MushroomAnimator;
 
@@ -45,6 +57,9 @@ public class BreathingGameController : MonoBehaviour
         
         switch (currentStage)
         {
+            case 0:
+                HandleGuideVideo();
+                break;
             case 1:
                 HandleBreathingTraining();
                 break;
@@ -71,6 +86,31 @@ public class BreathingGameController : MonoBehaviour
         isStart = true;
     }
 
+    public void HandleGuideVideo()
+    {
+        if (!isWatchingVideo)
+        {
+            guideVideoS1.SetActive(true);
+            isWatchingVideo = true;
+            // 添加视频播放结束的回调
+            guideVideoPlayer1.loopPointReached += OnVideoFinished;
+
+            // 开始播放视频
+            guideVideoPlayer1.Play();
+        }
+    }
+
+    
+
+    private void OnVideoFinished(VideoPlayer vp)
+    {
+        Debug.Log("视频播放完毕！");
+        // 在这里执行你想要的行为
+        isWatchingVideo = false;
+        currentStage = 1;
+        guideVideoS1.SetActive(false);
+    }
+
     public void ResetGame()
     {
         isStart = false;
@@ -94,6 +134,7 @@ public class BreathingGameController : MonoBehaviour
 
     void HandleWaterDropFormation()
     {
+        if(GuideAudioController.activeSelf == false) GuideAudioController.SetActive(true);
         breathTimer += Time.deltaTime;
         if (breathTimer >= breathDuration)
         {
@@ -124,6 +165,7 @@ public class BreathingGameController : MonoBehaviour
                 currentStage = 4;
                 breathCount = 0;
                 breathTimer = 0;
+                GuideAudioController.SetActive(false);
             }
             else
             {
