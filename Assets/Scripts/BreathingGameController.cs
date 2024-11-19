@@ -14,6 +14,13 @@ public class BreathingGameController : MonoBehaviour
     public int state2Count = 15;
     public int state3Count = 4;
 
+    private int unstableBreathCount = 0;
+    private bool isInPhase3 = false;
+    public AudioSource GuideAudioSourceB;
+    public float transitionDuration;
+    [Header("Environment References")]
+    [SerializeField] private OVRPassthroughLayer passthroughLayer;
+
     public GameObject[] state2List;
     public GameObject[] state3List;
 
@@ -50,6 +57,10 @@ public class BreathingGameController : MonoBehaviour
     public TextMeshProUGUI breathCountTxt;
 
     public Slider ProgressSlider;
+
+    public GameObject VRView;
+    public GameObject PassthroughView;
+    private bool isPhase3 = false;
 
     void Update()
     {
@@ -178,7 +189,7 @@ public class BreathingGameController : MonoBehaviour
     void HandleMushroomShake()
     {
         breathTimer += Time.deltaTime;
-        if (breathTimer >= breathDuration)
+        if (breathTimer >= breathDuration && isPhase3 == false)
         {
             breathTimer = 0f;
             breathCount++;
@@ -187,6 +198,8 @@ public class BreathingGameController : MonoBehaviour
             if (breathCount >= state3Count)
             {
                 Debug.Log("Game Finished!");
+                StartCoroutine(TransitionToPassthrough());
+                isPhase3 = true;
             }
         }
     }
@@ -214,7 +227,87 @@ public class BreathingGameController : MonoBehaviour
         // mushroomAS.Play();
     }
     
+    public void OnBreathingStateChanged(bool isStable, float duration)
+    {
+        if (!isInPhase3) return;
+
+        if (!isStable)
+        {
+            unstableBreathCount++;
+            HandleUnstableBreathing();
+        }
+    }
+
+    private void HandleUnstableBreathing()
+    {
+        switch (unstableBreathCount)
+        {
+            case 1:
+            case 2:
+                // 播放提示音频
+                GuideAudioSourceB.Play();
+                break;
+            case 3:
+                // 返回阶段2
+                StartCoroutine(TransitionToVirtualNature());
+                unstableBreathCount = 0;
+                break;
+        }
+    }
+
+    private IEnumerator TransitionToPassthrough()
+    {
+        float elapsed = 0f;
+        while (elapsed < transitionDuration)
+        {
+            float alpha = elapsed / transitionDuration;
+            // virtualEnvironment.GetComponent<Renderer>().material.SetFloat("_Alpha", 1 - alpha);
+            VRView.SetActive(false);
+            PassthroughView.SetActive(true);
+            passthroughLayer.colorMapEditorBrightness = alpha;
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        StartCoroutine(Phase3_Passthrough());
+    }
     
+    private IEnumerator Phase3_Passthrough()
+    {
+        // isInPhase3 = true;
+        unstableBreathCount = 0;
+        
+        yield return new WaitForSeconds(120f); // 2分钟
+
+        isInPhase3 = false;
+        // 进入下一个阶段或结束
+    }
+
+    private IEnumerator TransitionToVirtualNature()
+    {
+        float elapsed = 0f;
+        while (elapsed < transitionDuration)
+        {
+            float alpha = elapsed / transitionDuration;
+            passthroughLayer.colorMapEditorBrightness = 1 - alpha;
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        PassthroughView.SetActive(false);
+        VRView.SetActive(true);
+        isPhase3 = false;
+        // 重新开始阶段2，但使用音频D
+        GuideAudioSourceB.Play();
+        // StartCoroutine(Phase2_VirtualNature());
+    }
+    
+    // private IEnumerator Phase2_VirtualNature()
+    // {
+    //     currentPhase = ExercisePhase.VirtualNature;
+    //     audioSourceC.Play();
+    //     yield return new WaitForSeconds(100f);
+    //     StartCoroutine(TransitionToPassthrough());
+    // }
+
     void ActiveGameObjectList(GameObject[] list, bool active)
     {
         for (int i = 0; i < list.Length; i++)
